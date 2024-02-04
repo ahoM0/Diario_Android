@@ -57,44 +57,61 @@ class MainActivity : AppCompatActivity() {
             }
             // Boton para guardar el diario en ficheros
             es.instituto.diario.R.id.guardar->{
-                val builder = AlertDialog.Builder(this)
-                builder.setMessage("Confirmar guardar los datos, sobreescribiendo los anteriores")
-                builder.setTitle("Guardar diario")
-                builder.setCancelable(false)
-                builder.setPositiveButton("Sí") {
-                        dialog, which ->
-                    //Metodo del viewmodel que guarda el diario en el fichero
-                    this.viewModel.save(applicationContext )
+                val options = arrayOf(" CSV", " JSON", " XML")
 
-                }
-                builder.setNegativeButton("No") {
-                        dialog, which -> dialog.cancel()
-                }
-                val alertDialog = builder.create()
-                alertDialog.show()
+                val builder = AlertDialog.Builder(this)
+                builder.setTitle("Selecciona un formato para guardar: ")
+                    .setItems(options) { dialog, which ->
+                        // Tipos de formato
+                        when (which) {
+                            0 ->
+                                //Metodo del viewmodel que guarda el diario en el fichero
+                                this.viewModel.saveCSV(applicationContext )
+                            1 ->
+                                //Metodo del viewmodel que guarda el diario en el fichero
+                                this.viewModel.saveJSON(applicationContext )
+                          //  2 ->
+                                //Metodo del viewmodel que guarda el diario en el fichero
+                               // this.viewModel.saveCSV(applicationContext )
+
+                        }
+                    }
+                    .setNegativeButton("Cancelar") { dialog, _ ->
+                        // Cierra si cancelamos
+                        dialog.dismiss()
+                    }
+
+                val dialog = builder.create()
+                dialog.show()
 
                 true
             }
             // Carga el diario de los ficheros.
             es.instituto.diario.R.id.cargar->{
+                val options = arrayOf(" CSV", " JSON ", " XML")
 
                 val builder = AlertDialog.Builder(this)
-                builder.setMessage("Se carga el diario almacedo, los cambios no guardados se perderán")
-                builder.setTitle("Cargar diario")
-                builder.setCancelable(false)
-                builder.setPositiveButton("Sí") {
+                builder.setTitle("Selecciona un formato para cargar: ")
+                    .setItems(options) { dialog, which ->
+                        // Tipos de formato
+                        when (which) {
+                            0 ->
+                                // Metodo del viewmodel que carga el diario en el fichero
+                                this.viewModel.loadCSV(applicationContext )
+                            1 ->
+                            // Metodo del viewmodel que carga el diario en el fichero
+                            this.viewModel.loadJSON(applicationContext )
+                            //2 -> // Acciones para la opción 3
 
-                        dialog, which ->
-                    // Metodo del viewmodel que carga el diario en el fichero
-                    this.viewModel.load(applicationContext )
+                        }
+                    }
+                    .setNegativeButton("Cancelar") { dialog, _ ->
+                        // Cierra si cancelamos
+                        dialog.dismiss()
+                    }
 
-                }
-
-                builder.setNegativeButton("No") {
-                        dialog, which -> dialog.cancel()
-                }
-                val alertDialog = builder.create()
-                alertDialog.show()
+                val dialog = builder.create()
+                dialog.show()
 
                 true
             }

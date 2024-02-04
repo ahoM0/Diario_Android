@@ -15,16 +15,6 @@ import androidx.fragment.app.activityViewModels
 import java.text.SimpleDateFormat
 import java.util.Calendar
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [EntradaFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class EntradaFragment : Fragment() {
     private val diarioModel: DiarioModel by activityViewModels()
 
@@ -32,6 +22,7 @@ class EntradaFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
     }
+    // Cerrar formulario, vuelve al anterior fragment o ventana
     private fun closeForm(){
         val fm: FragmentManager = this.parentFragmentManager
         fm.popBackStack()
@@ -46,34 +37,35 @@ class EntradaFragment : Fragment() {
            this.closeForm()
 
         }
+        // Si hemos seleccionado una nota pues muestra sus datos para modificar
         if(diarioModel.item_selected!=null){
-            val formatter = SimpleDateFormat("dd-MM-yyyy")
             var fecha= diarioModel.item_selected!!.fecha
             var texto= diarioModel.item_selected!!.texto
-            elements.findViewById<TextView>(R.id.imagenFecha).text=formatter.format(fecha)
-
-
-           elements.findViewById<EditText>(R.id.texto).setText(texto)
+            elements.findViewById<TextView>(R.id.imagenFecha).text=fecha
+            elements.findViewById<EditText>(R.id.texto).setText(texto)
         }
-        elements.findViewById<Button>(R.id.aceptar).setOnClickListener{
+
+        // Listener del boton aceptar
+            elements.findViewById<Button>(R.id.aceptar).setOnClickListener{
             if(elements.findViewById<TextView>(R.id.fecha).text.length>0 && elements.findViewById<EditText>(R.id.texto).length()>0){
-
                 var fecha=elements.findViewById<TextView>(R.id.fecha).text.toString()
-                val formatter = SimpleDateFormat("dd-MM-yyyy")
                 var texto=elements.findViewById<EditText>(R.id.texto).text.toString()
+
+                // Si hay una nota seleccionada, actualiza sus datos.
                 if(diarioModel.item_selected!=null){
-                    diarioModel.item_selected!!.fecha=formatter.parse(fecha)
+                    diarioModel.item_selected!!.fecha=fecha
                     diarioModel.item_selected!!.texto=texto
-
-
                 }else {
-                    var entrada = Entrada(formatter.parse(fecha), texto)
+                    // Si no hay la añade.
+                    var entrada = Entrada(fecha, texto)
                     this.diarioModel.add(entrada)
                 }
+                // Y cerramos el fragmento, salimos al listado
                 this.closeForm()
 
             }
         }
+        // Listener del calendario, que muestra el grafico para seleccionar una fecha.
         elements.findViewById<ImageView>(R.id.imagenFecha).setOnClickListener{
             // on below line we are getting
             // the instance of our calendar.
@@ -121,22 +113,10 @@ class EntradaFragment : Fragment() {
     }
 
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment EntradaFragment.
-         */
-        // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance()= //param1: String, param2: String) =
+        fun newInstance()=
             EntradaFragment().apply {
-               /* arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }*/
+
             }
     }
 }

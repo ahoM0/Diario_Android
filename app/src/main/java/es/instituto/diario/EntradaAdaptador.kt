@@ -36,7 +36,7 @@ class EntradaAdaptador (private val context: Context) : RecyclerView.Adapter<Ent
         fun onClick(position: Int, model: Entrada)
     }
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.fecha.text=this.elementos.get(position).fecha.toString()
+        holder.fecha.text=this.elementos.get(position).fecha
         holder.texto.text=this.elementos.get(position).texto
         holder.boton.setOnClickListener{
             if(this.listener!=null){

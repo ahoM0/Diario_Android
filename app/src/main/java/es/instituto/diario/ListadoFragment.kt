@@ -62,7 +62,6 @@ class ListadoFragment : Fragment(), EntradaAdaptador.OnClickListener {
         this.diarioModel.item_selected=model
         fm.commit {
             replace(R.id.fragmentContainerView, EntradaFragment())
-
             addToBackStack("replacement")
         }
 
